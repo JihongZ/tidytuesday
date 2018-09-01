@@ -1,22 +1,7 @@
----
-title: "data_week_20"
-author: "Jihong"
-date: "2018/9/1"
-output: 
-  md_document:
-    variant: markdown_github
----
+strutured data
+==============
 
-```{r setup, include=FALSE}
-library(tidyverse)
-library(ggplot2)
-nfl <- read.csv("../data/2018-08-28/nfl_2010-2017.csv", stringsAsFactors = T, row.names = 1)
-head(nfl)
-colnames(nfl)
-```
-
-# strutured data
-```{r}
+``` r
 nfl_yds_yer <- nfl %>% 
   mutate_if(is.numeric, funs(ifelse(is.na(.), 0, .))) %>% 
   group_by(game_year, team) %>% 
@@ -29,11 +14,12 @@ nfl_yds_yer <- nfl %>%
 ## wide to long
 nfl_yds_yer_plot <- nfl_yds_yer %>% 
   gather(key = "yds_average", value = "avg", -c(game_year, team))
-
 ```
 
-# Plots
-```{r}
+Plots
+=====
+
+``` r
 ## plots
 nfl_yds_yer_plot %>% 
   group_by(game_year, yds_average) %>% 
@@ -41,7 +27,11 @@ nfl_yds_yer_plot %>%
   ggplot(mapping = aes(x = game_year, y = avg_sum)) +
   geom_line(aes(color = yds_average)) +
   labs(x = "Year", y = "Average Yds")
+```
 
+![](data_week_20_files/figure-markdown_github/unnamed-chunk-2-1.png)
+
+``` r
 nfl_yds_yer_plot %>% 
   group_by(game_year, team) %>% 
   summarise(avg_sum = mean(avg)) %>% 
@@ -50,3 +40,4 @@ nfl_yds_yer_plot %>%
   labs(x = "Year", y = "Average Yds")
 ```
 
+![](data_week_20_files/figure-markdown_github/unnamed-chunk-2-2.png)
