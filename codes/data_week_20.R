@@ -1,8 +1,11 @@
 library(tidyverse)
 library(ggplot2)
 
+setwd("~/Documents/tidytuesday/codes/")
 nfl <- read.csv("../data/2018-08-28/nfl_2010-2017.csv", stringsAsFactors = T, row.names = 1)
+
 head(nfl)
+str(nfl)
 colnames(nfl)
 
 ## strutured data
@@ -29,8 +32,12 @@ nfl_yds_yer_plot %>%
   labs(x = "Year", y = "Average Yds")
 
 nfl_yds_yer_plot %>% 
+  mutate_if(is.factor, trimws) %>% 
+  filter(nchar(team) == 3) %>% 
   group_by(game_year, team) %>% 
-  summarise(avg_sum = mean(avg)) %>% 
+  summarise(avg_sum = sum(avg)) %>% 
   ggplot(mapping = aes(x = game_year, y = avg_sum)) +
   geom_line(aes(color = team)) +
-  labs(x = "Year", y = "Average Yds")
+  labs(x = "Year", y = "Average Yds") +
+  scale_color_discrete(name="Teams")
+
