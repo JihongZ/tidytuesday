@@ -1,0 +1,74 @@
+---
+title: "Fast Food"
+author: "Jihong"
+date: "2018/9/4"
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE, echo=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+
+```{r libs}
+library(tidyverse)
+library(ggplot2)
+```
+
+## Import Data
+```{r pressure}
+ff <- read.csv(file = "~/Documents/tidytuesday_JZ/data/2018-09-04/fastfood_calories.csv")
+glimpse(ff)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Clean Data
+
+### Look at Chick-fil-A Nutrition
+```{r}
+ff$restaurant %>% unique
+
+(ff_plot <- ff %>% 
+  filter(restaurant == "Chick Fil-A") %>% 
+  select(item, calories, cal_fat) %>% 
+  arrange(calories) %>% 
+  gather(cals, cal_level, -item)
+    )
+
+p1 <- ff_plot %>% ggplot(aes(x = item, y = cal_level, fill = cals))
+
+p1 +
+  geom_bar(position="dodge", stat="identity")+
+  xlab("Names of Items") +
+  ylab("Calories") +
+  labs(title = "Chick Fil-A Calories")+
+  scale_color_discrete(labels = c("Total", "Calories from fat"))+
+  theme(title = element_text(family = "WenQuanYi", size = 13),
+        axis.text.x = element_text(angle =45, hjust = 1))+
+  guides(fill=guide_legend(title="Calories", title.position = "bottom"))+
+  scale_fill_discrete(labels = c("Fat Calories", "Total Calories"))
+
+```
+
+## Look at which resturant has low average calories
+```{r}
+ff_plot2 <- ff %>% 
+  select(restaurant, calories, total_carb, protein) %>% 
+  group_by(restaurant) %>% 
+  mutate_at(vars(calories, total_carb, protein), funs(mean(., na.rm = T))) %>% 
+  distinct() %>% 
+  ungroup() %>% 
+  gather(Ingredients, levels, -restaurant)
+
+p2 <- ff_plot2 %>% ggplot(aes(x = restaurant, y = levels, fill = Ingredients))
+
+p2 +
+  geom_bar(position="dodge", stat="identity")+
+  labs(x = "Restaurants", y="Levels", title = "Which Restaurant more healthier?")+
+  scale_fill_discrete(labels = c("Average Calories", "Average Protein", "Average Total Carb"))
+```
+
