@@ -163,7 +163,7 @@ p1 +
   labs(title = "Chick Fil-A Calories")+
   scale_color_discrete(labels = c("Total", "Calories from fat"))+
   theme(title = element_text(family = "WenQuanYi", size = 13),
-        axis.text.x = element_text(angle =45, hjust = 1))+
+        axis.text.x = element_text(angle =135, hjust = 1))+
   guides(fill=guide_legend(title="Calories", title.position = "bottom"))+
   scale_fill_discrete(labels = c("Fat Calories", "Total Calories"))
 ```
@@ -187,7 +187,9 @@ p2 <- ff_plot2 %>% ggplot(aes(x = restaurant, y = levels, fill = Ingredients))
 p2 +
   geom_bar(position="dodge", stat="identity")+
   labs(x = "Restaurants", y="Levels", title = "Which Restaurant more healthier?")+
-  scale_fill_discrete(labels = c("Average Calories", "Average Protein", "Average Total Carb"))
+  scale_fill_discrete(labels = c("Average Calories", "Average Protein", "Average Total Carb"))+
+  theme(title = element_text(family = "WenQuanYi", size = 13),
+        axis.text.x = element_text(angle =45, hjust = 1))
 ```
 
 ![](data_week_21_fastfood_Analysis_files/figure-markdown_github/unnamed-chunk-2-1.png)
