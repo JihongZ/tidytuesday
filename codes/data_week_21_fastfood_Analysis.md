@@ -189,7 +189,7 @@ p2 +
   labs(x = "Restaurants", y="Levels", title = "Which Restaurant more healthier?")+
   scale_fill_discrete(labels = c("Average Calories", "Average Protein", "Average Total Carb"))+
   theme(title = element_text(family = "WenQuanYi", size = 13),
-        axis.text.x = element_text(angle =45, hjust = 1))
+        axis.text.x = element_text(angle =135, hjust = 1))
 ```
 
 ![](data_week_21_fastfood_Analysis_files/figure-markdown_github/unnamed-chunk-2-1.png)
